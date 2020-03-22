@@ -11,4 +11,4 @@ const el = "cdn-app";
   document.body.append(cdn);
 })();
 
-ReactDOM.render(<App />, document.querySelector(`#${el}`));
+(() => ReactDOM.render(<App />, document.querySelector(`#${el}`)))();
