@@ -1,14 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import { App } from "./App";
+import { ChatBot } from "./ChatBot";
 
 // IIFE to create application DOM target
-const el = "cdn-app";
 (() => {
-  const cdn = document.createElement("DIV");
-  cdn.setAttribute("id", el);
-  document.body.append(cdn);
+  const kore = document.createElement("DIV");
+  kore.setAttribute("id", "cb");
+  document.body.append(kore);
 })();
 
-(() => ReactDOM.render(<App />, document.querySelector(`#${el}`)))();
+(() => ReactDOM.render(<ChatBot />, document.querySelector("#cb")))();

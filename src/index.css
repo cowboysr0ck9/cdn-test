@@ -1,13 +1,136 @@
-.cb3-holder {
+/* CSS3 Variables */
+:root {
+  --cb-primary: #3d4d56;
+  --cb-gradient: linear-gradient(-45deg, #3d4d56, #698494);
+  --default-size: 64px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Helper Functions */
+.d-flex {
+  display: flex;
+}
+
+.j-c-c {
+  justify-content: center;
+}
+
+.a-i-c {
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cb-holder {
+  background-image: var(--cb-gradient);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--default-size);
+  color: white;
+  font-family: sans-serif;
+  width: var(--default-size);
   position: fixed;
   bottom: 1.25rem;
   right: 1.25rem;
-  background-color: rgb(29, 40, 51);
-  display: inline-flex;
+  border-radius: 25rem 25rem 4rem 25rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.cb-holder:hover {
+  border-radius: 25rem 4rem 25rem 25rem;
+  cursor: pointer;
+}
+
+.cb-container {
+  width: 360px;
+  height: 460px;
+  background-color: #fafafa;
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  right: 1.25rem;
+  border: 1px solid #ededed;
+  bottom: 6.25rem;
+  border-radius: 0.25rem;
+}
+
+textarea {
+  border: none;
+  resize: none;
+  display: block;
+  width: 100%;
+  border-top: 1px solid #ededed;
+  background-color: white;
+  height: 72px;
+  font-size: 0.875rem;
+  color: var(--cb-primary);
+  padding: 0.5rem;
+  border-radius: 0 0 0.25rem 0.25rem;
+}
+
+textarea:focus {
+  outline: 0;
+}
+
+header {
+  background-color: #3d4d56;
+  color: white;
+  font-family: sans-serif;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.25rem 0.25rem 0 0;
+}
+
+header h4 {
+  margin: 0;
+}
+
+.cb-badge {
+  height: 24px;
+  width: 24px;
+  background-image: linear-gradient(0deg, rgba(61, 77, 86, 0.15), transparent);
+  background-color: #4caf50;
+  display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: bold;
+  border-radius: 100%;
+  font-size: 0.75rem;
+  position: absolute;
+  right: 48px;
+  bottom: 40px;
+  text-shadow: 1px 1px 0px rgba(61, 77, 86, 0.25);
+}
+
+.cb-btn {
+  border: none;
+  background-color: rgba(250, 250, 250, 0.25);
+  padding: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+  width: 36px;
+  font-size: 1rem;
+  font-weight: 300;
   color: white;
-  height: 64px;
-  width: 64px;
-  border-radius: 25rem 25rem 4rem 25rem;
+  border-radius: 100%;
+}
+
+.cb-btn:hover {
+  cursor: pointer;
+}
+.cb-btn:focus {
+  outline: none;
 }
