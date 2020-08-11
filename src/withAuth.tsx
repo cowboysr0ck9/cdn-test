@@ -14,7 +14,7 @@ export const withAuth = <P extends object>(
 ) => (props: any) => {
   const [authorization, setAuthorization] = useState<IUser["authorization"]>();
   const [userInfo, setUserInfo] = useState<IUser["userInfo"]>();
-  const [wss, setWss]: any = useState(null);
+  const [wss, setWss]: any = useState<WebSocket>();
   useEffect(() => {
     koreJwtGrant()
       .then((auth) => {
@@ -35,7 +35,7 @@ export const withAuth = <P extends object>(
             };
             wss.onopen = (args) => {
               setInterval(() => {
-                const msgId = cuid();
+                const id = cuid();
                 wss.send(
                   JSON.stringify({
                     type: "ping",
@@ -46,7 +46,7 @@ export const withAuth = <P extends object>(
                     },
                     client: "botbuilder",
                     meta: { timezone: "America/New_York", locale: "en-US" },
-                    id: msgId,
+                    id,
                   })
                 );
               }, 29_000);

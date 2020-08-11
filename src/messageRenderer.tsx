@@ -26,8 +26,12 @@ export const renderMessageTemplate = (payload: any, wss: WebSocket) => {
       );
 
     default:
-      // Render nothing if template is not matched
-      break;
+      const { id, text } = payload;
+      return (
+        <li key={id} className="kore-message kore-message-user">
+          <p>{text}</p>
+        </li>
+      );
   }
 };
 

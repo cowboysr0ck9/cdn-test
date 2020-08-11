@@ -1,7 +1,12 @@
+// ie11 Polyfill
+import "react-app-polyfill/ie11";
+import "react-app-polyfill/stable";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import { ChatBot } from "./ChatBot";
+
 window.KORE_WEB_SDK_CONFIG = {
   baseURL: "https://bots.kore.ai",
   bot: {
@@ -16,6 +21,7 @@ window.KORE_WEB_SDK_CONFIG = {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1OTUxNjc3OTksImV4cCI6MTY5NjM4OTc5OSwiYXVkIjoiaHR0cHM6Ly9pZHAua29yZS5jb20vYXV0aG9yaXplIiwiaXNzIjoiY3MtNDZjMjBiY2QtMmI3YS01MDgwLWIwMDctYmZkZWU0MDlkOGU0Iiwic3ViIjoiODl0eWxlcmZzYWZkc2Fmc2QzMjQyMzQwOSIsImlzQW5vbnltb3VzIjp0cnVlfQ.yvj37o6MDqsMuOww-vjrYy5YBeXW-P6luHdqCZ6j8Z0",
   jwtURL: "https://bots.kore.ai",
 };
+
 // IIFE to create application DOM target
 (() => {
   const kore = document.createElement("DIV");

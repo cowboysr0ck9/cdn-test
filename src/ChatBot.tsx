@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { Header } from "./Header";
-import { MessageContainer } from "./MessageContainer";
-
 import ChatIcon from "./assets/images/comments-regular.svg";
 import { withAuth } from "./withAuth";
-import { withSocket } from "./withSocket";
 import { pipe } from "./utils";
+import { store } from "./state/index";
+import { Provider } from "react-redux";
+import { MessageContainer } from "./MessageContainer";
 
 const ChatBotBase = (props: any) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessage] = useState([{}]);
   return (
-    <>
+    <Provider store={store}>
       <div onClick={() => setIsOpen(!isOpen)} className="cb-holder">
         <span className="cb-badge">1</span>
         <img src={ChatIcon} height={24} alt="Chatbot Icon"></img>
@@ -25,7 +24,7 @@ const ChatBotBase = (props: any) => {
             onReset={() => console.log("Chatbot Reset")}
             onMaximize={() => console.log("Chatbot Maximized")}
           />
-          <MessageContainer data={messages} />
+          <MessageContainer />
           <textarea
             onChange={(e) => {
               console.log("WSS");
@@ -34,8 +33,8 @@ const ChatBotBase = (props: any) => {
           ></textarea>
         </div>
       )}
-    </>
+    </Provider>
   );
 };
 
-export const ChatBot = pipe(withAuth, withSocket)(ChatBotBase);
+export const ChatBot = pipe(withAuth)(ChatBotBase);
