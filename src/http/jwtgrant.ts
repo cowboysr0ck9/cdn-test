@@ -7,7 +7,7 @@ export const JWT_GRANT_URL = "/api/1.1/oAuth/token/jwtgrant";
  * The client app exchanges the JWT token for the accessToken on the
  * Kore AI platform Platform.
  */
-export const koreJwtGrant = async () => {
+export const koreJwtGrant = () => {
   const payload = {
     assertion: window.KORE_WEB_SDK_CONFIG.jwt || "",
     botInfo: {

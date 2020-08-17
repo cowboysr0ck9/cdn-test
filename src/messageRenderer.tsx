@@ -1,44 +1,36 @@
 import React from "react";
 
-export const renderMessageTemplate = (payload: any, wss: WebSocket) => {
-  console.log("Message Temaplate", wss);
-  switch (payload.template_type) {
+export const renderMessageTemplate = (payload: any) => {
+  switch (payload.payload.template_type) {
     case "quick_replies":
+      const { quick_replies } = payload.payload;
       return (
-        <li className="kore-message kore-message-bot">
-          <p>{payload.text}</p>
-          <ul>
-            {payload.quick_replies.map((msg: any) => {
-              return (
-                <li value={msg.payload}>
-                  <button>{msg.title}</button>
-                </li>
-              );
-            })}
-          </ul>
+        <li key={payload.id} className="kore-message kore-message-bot">
+          <p>{payload.payload.text}</p>
+          {renderQuickReplies(quick_replies)}
         </li>
       );
     case "user_message":
       return (
-        <li className="kore-message kore-message-user">
+        <li key={payload.id} className="kore-message kore-message-user">
           <h6>user message</h6>
         </li>
       );
 
     default:
-      const { id, text } = payload;
       return (
-        <li key={id} className="kore-message kore-message-user">
-          <p>{text}</p>
+        <li key={payload.id} className="kore-message kore-message-user">
+          <p>Add this to the rendering function</p>
+          <p>{JSON.stringify(payload.payload)}</p>
         </li>
       );
   }
 };
 
-export interface IBotResponse {
+export interface IBotResponse<T> {
   type: string;
   from: string;
-  message: Message[];
+  message: Message<T>[];
   messageId: string;
   botInfo: BotInfo;
   createdOn: Date;
@@ -51,9 +43,9 @@ export interface BotInfo {
   taskBotId: string;
 }
 
-export interface Message {
+export interface Message<T> {
   type: string;
-  component: Component;
+  component: Component<T>;
   cInfo: CInfo;
 }
 
@@ -61,14 +53,14 @@ export interface CInfo {
   body: string;
 }
 
-export interface Component {
+export interface Component<T> {
   type: string;
-  payload: ComponentPayload;
+  payload: ComponentPayload<T>;
 }
 
-export interface ComponentPayload {
+export interface ComponentPayload<T> {
   type: string;
-  payload: PayloadPayload;
+  payload: T;
 }
 
 export interface PayloadPayload {
@@ -82,3 +74,24 @@ export interface QuickReply {
   title: string;
   payload: string;
 }
+
+const renderQuickReplies = (quick_replies: QuickReply[]) => {
+  return (
+    <ul>
+      {quick_replies.map((msg: QuickReply, i: number) => {
+        const { payload, title } = msg;
+        return (
+          <li
+            key={i}
+            value={payload}
+            onClick={() =>
+              console.log("Send this value via Websocket: ", payload)
+            }
+          >
+            <button>{title}</button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+};

@@ -13,7 +13,7 @@ export const createMessagePayload = (
   JSON.stringify({
     clientMessageId: id,
     message: {
-      body: message,
+      body: message.trim(),
       attachments: [],
     },
     resourceid: "/bot.message",

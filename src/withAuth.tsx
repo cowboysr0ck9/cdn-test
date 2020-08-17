@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { koreJwtGrant, IUser, koreRtmStart } from "./http";
 import cuid from "cuid";
-import { IBotResponse } from "./messageRenderer";
-
+// import { IBotResponse, PayloadPayload } from "./messageRenderer";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { store, createMessage, createAlert } from "./state";
 /**
  * @description Custom HOC that provides the application wiht access to the Kore AI
  * initial auththentication and metadata information
  * @param WrappedComponent Any React Component that you wish to provide
  * the Kore AI Authentication connection
  */
-export const withAuth = <P extends object>(
+export const withAuthBase = <P extends object>(
   HOCComponent: React.ComponentType<P>
 ) => (props: any) => {
   const [authorization, setAuthorization] = useState<IUser["authorization"]>();
   const [userInfo, setUserInfo] = useState<IUser["userInfo"]>();
   const [wss, setWss]: any = useState<WebSocket>();
+
   useEffect(() => {
     koreJwtGrant()
       .then((auth) => {
@@ -45,7 +48,10 @@ export const withAuth = <P extends object>(
                       taskBotId: window.KORE_WEB_SDK_CONFIG.bot.id,
                     },
                     client: "botbuilder",
-                    meta: { timezone: "America/New_York", locale: "en-US" },
+                    meta: {
+                      timezone: "America/New_York",
+                      locale: "en-US",
+                    },
                     id,
                   })
                 );
@@ -69,15 +75,28 @@ export const withAuth = <P extends object>(
                     console.log(payload);
                     break;
                   case "bot_response":
-                    const { message }: IBotResponse = payload;
-                    console.log(payload);
+                    const { message }: any = payload;
+
+                    const cleanedMessagePayload = message.map((x: any) => {
+                      const { payload } = x.component.payload;
+                      const id = cuid();
+                      return {
+                        id,
+                        payload,
+                      };
+                    });
+
+                    store.dispatch(createMessage([...cleanedMessagePayload]));
+
                     break;
                   default:
-                    console.log("No matching payload");
+                    store.dispatch(
+                      createAlert("danger", "No matching payload")
+                    );
                     break;
                 }
               } catch (error) {
-                console.log("Failed to parse onMessage event");
+                createAlert("danger", "Failed to parse onMessage event");
               }
             };
             wss.onerror = (args) => {
@@ -108,3 +127,15 @@ export const withAuth = <P extends object>(
     />
   );
 };
+const mapStateToProps = (state: any) => ({
+  messages: state.messages,
+});
+
+const mapDispatchToProps = {
+  createMessage,
+};
+
+export const withAuth = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withAuthBase
+);

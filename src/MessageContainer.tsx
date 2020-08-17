@@ -2,16 +2,13 @@ import React, { CSSProperties } from "react";
 import { renderMessageTemplate } from "./messageRenderer";
 import { connect } from "react-redux";
 
-export const MessageContainerBase = ({ children, ws, ...props }: any) => {
-  console.log("Render", props);
-  return (
-    <div style={style}>
-      <small style={textMuted}>{new Date().toDateString()}</small>
-      {children}
-      {props.messages.map((x: any) => renderMessageTemplate(x, ws))}
-    </div>
-  );
-};
+const MessageContainerBase = ({ children, messages }: any) => (
+  <div style={style}>
+    <small style={textMuted}>{new Date().toDateString()}</small>
+    {children}
+    {messages.map((x: any) => renderMessageTemplate(x))}
+  </div>
+);
 
 const mapStateToProps = (state: any) => ({
   messages: state.messages,

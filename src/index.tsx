@@ -5,7 +5,7 @@ import "react-app-polyfill/stable";
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import { ChatBot } from "./ChatBot";
+import { Chatbot } from "./Chatbot";
 
 window.KORE_WEB_SDK_CONFIG = {
   baseURL: "https://bots.kore.ai",
@@ -49,4 +49,4 @@ export interface KORE_WEB_SDK_CONFIG {
   };
 }
 
-(() => ReactDOM.render(<ChatBot />, document.querySelector("#cb")))();
+(() => ReactDOM.render(<Chatbot />, document.querySelector("#cb")))();

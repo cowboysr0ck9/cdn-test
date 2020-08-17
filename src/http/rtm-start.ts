@@ -7,7 +7,7 @@ export const RTM_START_URL = "/api/1.1/rtm/start";
  * the following endpoint. This URL is short lived and expires
  * in 30seconds. You must ensure it is used to connect before expiration.
  */
-export const koreRtmStart = async (token: string) => {
+export const koreRtmStart = (token: string) => {
   const payload = {
     botInfo: {
       chatBot: window.KORE_WEB_SDK_CONFIG.bot.name,
