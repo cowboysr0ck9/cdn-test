@@ -14,3 +14,20 @@ export const formatClockTime = (time: Date, locale = "en-US") =>
  * Create and return the current time in ISO standard format
  */
 export const currentIsoTime = () => new Date().toISOString();
+
+/**
+ * Returns the current users International Timezone ex. America/New_York
+ */
+export const timezone = () => {
+  const timezone = "America/New_York";
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch {
+    return timezone;
+  }
+};
+
+/**
+ * Returns the current user's locale ex. en-gb
+ */
+export const locale = () => navigator.language;

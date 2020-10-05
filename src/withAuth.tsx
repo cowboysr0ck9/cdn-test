@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { koreJwtGrant, IUser, koreRtmStart } from "./http";
+import { koreJwtGrant, koreRtmStart } from "./http";
 import cuid from "cuid";
 // import { IBotResponse, PayloadPayload } from "./messageRenderer";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { store, createMessage, createAlert } from "./state";
+import {
+  store,
+  createMessage,
+  createAlert,
+  createAuth,
+  createUser,
+} from "./state";
+
+import { timezone, locale } from "./utils";
+
 /**
  * @description Custom HOC that provides the application wiht access to the Kore AI
  * initial auththentication and metadata information
@@ -14,24 +23,22 @@ import { store, createMessage, createAlert } from "./state";
 export const withAuthBase = <P extends object>(
   HOCComponent: React.ComponentType<P>
 ) => (props: any) => {
-  const [authorization, setAuthorization] = useState<IUser["authorization"]>();
-  const [userInfo, setUserInfo] = useState<IUser["userInfo"]>();
-  const [wss, setWss]: any = useState<WebSocket>();
+  const [webSocket, setWebSocket]: any = useState<WebSocket>();
 
   useEffect(() => {
     koreJwtGrant()
       .then((auth) => {
-        const { data } = auth;
-        setAuthorization({
-          ...authorization,
-          ...data.authorization,
-        });
-        setUserInfo({ ...userInfo, ...data.userInfo });
-        koreRtmStart(data.authorization.accessToken)
+        const { authorization, userInfo } = auth.data;
+
+        store.dispatch(createAuth({ ...authorization }));
+        store.dispatch(createUser({ ...userInfo }));
+
+        koreRtmStart(authorization.accessToken)
           .then((res) => {
             const { url } = res.data;
             const wss = new WebSocket(url);
-            setWss(wss);
+            setWebSocket(wss);
+
             wss.onclose = (args) => {
               console.log("WSS Connection Closed");
               console.log(args);
@@ -49,8 +56,8 @@ export const withAuthBase = <P extends object>(
                     },
                     client: "botbuilder",
                     meta: {
-                      timezone: "America/New_York",
-                      locale: "en-US",
+                      timezone: timezone,
+                      locale: locale,
                     },
                     id,
                   })
@@ -78,12 +85,23 @@ export const withAuthBase = <P extends object>(
                     const { message }: any = payload;
 
                     const cleanedMessagePayload = message.map((x: any) => {
-                      const { payload } = x.component.payload;
+                      const { payload, type } = x.component;
                       const id = cuid();
-                      return {
-                        id,
-                        payload,
-                      };
+                      if (type !== "template") {
+                        return {
+                          id,
+                          type,
+                          author: "bot",
+                          payload,
+                        };
+                      } else {
+                        return {
+                          id,
+                          type: payload.payload.template_type,
+                          author: "bot",
+                          payload: payload.payload,
+                        };
+                      }
                     });
 
                     store.dispatch(createMessage([...cleanedMessagePayload]));
@@ -118,16 +136,11 @@ export const withAuthBase = <P extends object>(
       });
   }, []);
 
-  return (
-    <HOCComponent
-      {...props}
-      wss={wss}
-      authorization={authorization}
-      userInfo={userInfo}
-    />
-  );
+  return <HOCComponent {...props} wss={webSocket} />;
 };
 const mapStateToProps = (state: any) => ({
+  authorization: state.authorization,
+  userInfo: state.userInfo,
   messages: state.messages,
 });
 

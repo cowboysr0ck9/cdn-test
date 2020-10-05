@@ -1,11 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { createMessagePayload } from "../http";
-import cuid from 'cuid'
 const InputBase = () => {
   const handleMessageSubmit = () => {
-      const id = cuid();
-      createMessagePayload(id,'','','')
+    createMessagePayload("MEssage sent");
     console.log("Message Sent");
   };
 

@@ -1,12 +1,15 @@
 import Axios from "axios";
+import { NETWORK_TIMEOUT_IN_SECONDS } from "./constants";
 
+/**
+ * Shareable HTTP headers that can be shared across multiple Axios instances
+ */
 const UNIVERSAL_HTTP_HEADERS = {
   "Content-Type": "application/json",
 };
 
-const NETWORK_TIMEOUT_IN_SECONDS = 5_000;
 /**
- * @description Official Kore AI HTTP method for accessing platform API's.
+ * Official Kore Ai HTTP method for accessing platform API's.
  */
 export const koreHTTP = Axios.create({
   baseURL: "https://bots.kore.ai",
@@ -17,7 +20,9 @@ export const koreHTTP = Axios.create({
 });
 
 /**
- * @description Official HTTP method for accessing client built JWT endpoint.
+ * Official HTTP method for accessing client built JWT endpoint.
+ * Default: Points to Kore Ai Cloud, but for on-prem deployments
+ * this would point to your JWT service.
  */
 export const authHTTP = Axios.create({
   baseURL: "https://bots.kore.ai",

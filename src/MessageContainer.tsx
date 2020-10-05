@@ -2,11 +2,11 @@ import React, { CSSProperties } from "react";
 import { renderMessageTemplate } from "./messageRenderer";
 import { connect } from "react-redux";
 
-const MessageContainerBase = ({ children, messages }: any) => (
+const MessageContainerBase = ({ children, messages, ...props }: any) => (
   <div style={style}>
     <small style={textMuted}>{new Date().toDateString()}</small>
     {children}
-    {messages.map((x: any) => renderMessageTemplate(x))}
+    {messages.map((x: any) => renderMessageTemplate(x, props))}
   </div>
 );
 
@@ -21,6 +21,7 @@ export const MessageContainer = connect(
 
 const style: CSSProperties = {
   height: "100%",
+  overflowY: "scroll",
   backgroundColor: "#fafafa",
   fontSize: ".875rem",
   padding: "1rem 1.25rem",

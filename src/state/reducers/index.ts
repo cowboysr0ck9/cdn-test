@@ -3,7 +3,6 @@ import { combineReducers } from "redux";
 // Application Reducers
 import { authorization } from "./auth";
 import { userInfo } from "./user";
-import { socket } from "./wss";
 import { messages } from "./messages";
 import { alerts } from "./alerts";
 
@@ -11,7 +10,6 @@ import { alerts } from "./alerts";
 const ROOT_REDUCER = combineReducers({
   authorization,
   userInfo,
-  socket,
   alerts,
   messages,
 });

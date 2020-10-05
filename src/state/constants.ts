@@ -11,6 +11,3 @@ export const RESET_MESSAGE = "RESET_MESSAGE";
 
 export const ADD_USER = "ADD_USER";
 export const REMOVE_USER = "REMOVE_USER";
-
-export const ADD_SOCKET = "ADD_SOCKET";
-export const REMOVE_SOCKET = "REMOVE_SOCKET";

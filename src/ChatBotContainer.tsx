@@ -4,6 +4,7 @@ import ChatIcon from "./assets/images/comments-regular.svg";
 import { withAuth } from "./withAuth";
 import { pipe } from "./utils";
 import { MessageContainer } from "./MessageContainer";
+import { UserInput } from "./components/UserInput";
 
 const ChatBotBase = (props: any) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,13 +23,8 @@ const ChatBotBase = (props: any) => {
             onReset={() => console.log("Chatbot Reset")}
             onMaximize={() => console.log("Chatbot Maximized")}
           />
-          <MessageContainer />
-          <textarea
-            onChange={(e) => {
-              console.log("WSS");
-            }}
-            placeholder={"Enter message here"}
-          ></textarea>
+          <MessageContainer {...props} />
+          <UserInput {...props} />
         </div>
       )}
     </>

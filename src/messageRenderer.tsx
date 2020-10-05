@@ -1,22 +1,28 @@
 import React from "react";
+import { createMessagePayload } from "./http";
 
-export const renderMessageTemplate = (payload: any) => {
-  switch (payload.payload.template_type) {
+export const renderMessageTemplate = (payload: any, ...props: any) => {
+  switch (payload.type) {
     case "quick_replies":
       const { quick_replies } = payload.payload;
       return (
         <li key={payload.id} className="kore-message kore-message-bot">
           <p>{payload.payload.text}</p>
-          {renderQuickReplies(quick_replies)}
+          {renderQuickReplies(quick_replies, props[0].wss)}
         </li>
       );
     case "user_message":
       return (
         <li key={payload.id} className="kore-message kore-message-user">
-          <h6>user message</h6>
+          <h6>{payload.payload.text}</h6>
         </li>
       );
-
+    case "text":
+      return (
+        <li key={payload.id} className="kore-message kore-message-user">
+          <h6>{payload.payload.text}</h6>
+        </li>
+      );
     default:
       return (
         <li key={payload.id} className="kore-message kore-message-user">
@@ -75,19 +81,14 @@ export interface QuickReply {
   payload: string;
 }
 
-const renderQuickReplies = (quick_replies: QuickReply[]) => {
+const renderQuickReplies = (quick_replies: QuickReply[], wss: WebSocket) => {
   return (
     <ul>
       {quick_replies.map((msg: QuickReply, i: number) => {
         const { payload, title } = msg;
+        const message = createMessagePayload(payload);
         return (
-          <li
-            key={i}
-            value={payload}
-            onClick={() =>
-              console.log("Send this value via Websocket: ", payload)
-            }
-          >
+          <li key={i} value={payload} onClick={() => wss.send(message)}>
             <button>{title}</button>
           </li>
         );

@@ -1,10 +1,9 @@
 import { koreHTTP } from "./index";
 import { IUser } from "./jwtgrant.model";
-export const JWT_GRANT_URL = "/api/1.1/oAuth/token/jwtgrant";
 
 /**
- * Initial step in the Kore AI JWT oAuth 2.0 authentication flow.
- * The client app exchanges the JWT token for the accessToken on the
+ * Initial step in the Kore AI JWT OAuth 2.0 authentication flow.
+ * The client app exchanges the JWT token for the ```accessToken``` on the
  * Kore AI platform Platform.
  */
 export const koreJwtGrant = () => {
@@ -16,5 +15,5 @@ export const koreJwtGrant = () => {
     },
   };
 
-  return koreHTTP.post<IUser>(JWT_GRANT_URL, payload);
+  return koreHTTP.post<IUser>("/api/1.1/oAuth/token/jwtgrant", payload);
 };

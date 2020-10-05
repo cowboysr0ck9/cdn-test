@@ -1,9 +1,8 @@
 import { koreHTTP } from "./http";
 import { IRTMResponse } from "./rtm-start.model";
-export const RTM_START_URL = "/api/1.1/rtm/start";
 
 /**
- * @descriptionv The client app acquires the WebSocket (WSS) URL using
+ * @description The client app acquires the WebSocket (WSS) URL using
  * the following endpoint. This URL is short lived and expires
  * in 30seconds. You must ensure it is used to connect before expiration.
  */
@@ -16,7 +15,7 @@ export const koreRtmStart = (token: string) => {
     language: "en",
     token: {},
   };
-  return koreHTTP.post<IRTMResponse>(RTM_START_URL, payload, {
+  return koreHTTP.post<IRTMResponse>("/api/1.1/rtm/start", payload, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
